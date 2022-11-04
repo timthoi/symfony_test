@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Category;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Exception;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Validator\Validation;
 
@@ -45,7 +46,8 @@ class CategoryRepository extends ServiceEntityRepository
         try {
             $em->getConnection()->beginTransaction(); // suspend auto-commit
             $em->getConnection()->setAutoCommit(false);
-            foreach ($entities as $item) {
+
+            foreach ($entities as $index => $item) {
                 $category = new Category();
                 $category->setTitle($item['title']);
                 $category->setEId($item['eId']);
