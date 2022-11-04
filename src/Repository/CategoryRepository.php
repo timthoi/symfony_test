@@ -46,14 +46,15 @@ class CategoryRepository extends ServiceEntityRepository
             $em->getConnection()->beginTransaction(); // suspend auto-commit
             $em->getConnection()->setAutoCommit(false);
             foreach ($entities as $item) {
-                $em->transactional(function ($em) use ($item) {
-                    $category = new Category();
-                    $category->setTitle($item['title']);
-                    $category->setEId($item['eId']);
+                $category = new Category();
+                $category->setTitle($item['title']);
+                $category->setEId($item['eId']);
 
-                    $em->persist($category);
-                });
+                $em->persist($category);
+                $em->flush();
             }
+
+            $em->commit();
         } catch (Exception $e) {
             $em->getConnection()->rollBack();
             throw $e;

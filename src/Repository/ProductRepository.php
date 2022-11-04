@@ -39,27 +39,28 @@ class ProductRepository extends ServiceEntityRepository
 
         try {
             /* do not know why not run transaction */
-            $em->getConnection()->beginTransaction(); // suspend auto-commit
+           // $em->getConnection()->beginTransaction(); // suspend auto-commit
             $em->getConnection()->setAutoCommit(false);
 
             foreach ($entities as $item) {
-                $em->transactional(function ($em) use ($item) {
-                    $product = new Product();
+                $product = new Product();
 
-                    $product->setTitle($item['title']);
-                    $product->setPrice($item['price']);
-                    $product->setEId($item['eId']);
+                $product->setTitle($item['title']);
+                $product->setPrice($item['price']);
+                $product->setEId($item['eId']);
 
-                    if (isset($item['categoryEId'])) {
-                        foreach ($item['categoryEId'] as $categoryEId) {
-                            $category = $em->getRepository(Category::class)->findOneBy(['id' => $categoryEId]);
-                            $product->addCategory($category);
-                        }
+                if (isset($item['categoryEId'])) {
+                    foreach ($item['categoryEId'] as $categoryEId) {
+                        $category = $em->getRepository(Category::class)->findOneBy(['id' => $categoryEId]);
+                        $product->addCategory($category);
                     }
+                }
 
-                    $em->persist($product);
-                });
+                $em->persist($product);
+                $em->flush();
             }
+
+            $em->commit();
         } catch (Exception $e) {
             $em->getConnection()->rollBack();
             throw $e;
