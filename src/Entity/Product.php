@@ -3,12 +3,14 @@
 namespace App\Entity;
 
 use App\Repository\ProductRepository;
+use App\EventListener\ProductListener;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=ProductRepository::class)
+ * @ORM\EntityListeners({ProductListener::class})
  */
 class Product
 {
