@@ -14,7 +14,7 @@ class SendMail
     public function sendMail($entity)
     {
         $emailAdmin = $_ENV['EMAIL_ADMIN'];
-        dd($entity);
+//    dd($entity);
 //        dd($emailAdmin);
 //        $email = (new Email())
 //            ->from('hello@example.com')
